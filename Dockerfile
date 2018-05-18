@@ -1,0 +1,2 @@
+# Your dockerfile
+FROM nginx

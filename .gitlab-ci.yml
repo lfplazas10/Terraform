@@ -1,0 +1,49 @@
+---
+# Do not forget to add following ENV vars in GitLab project settings
+# GOOGLE_CREDENTIALS, GOOGLE_ACCOUNT, GOOGLE_PROJECT_ID
+stages:
+ - build
+ - apply
+
+variables:
+  APP_IMAGE_REGISTRY_URL: eu.gcr.io/${GOOGLE_PROJECT_ID}/myapp
+  BRANCH_NAME: ${CI_COMMIT_REF_SLUG}
+
+static-analysis:
+  stage: build
+  image: coala/base:0.11
+  allow_failure: true
+  script:
+   - coala-ci
+
+build:
+  stage: build
+  image: adamjanis/cloudweekend-runner
+  script:
+   # GCP container registry login magic start
+   - echo "$GOOGLE_CREDENTIALS">/etc/key-file.json
+   - gcloud auth activate-service-account $GOOGLE_ACCOUNT --key-file /etc/key-file.json
+   - gcloud auth configure-docker
+   # GCP container registry login magic end
+   - docker build -t myapp .
+   - docker tag myapp ${APP_IMAGE_REGISTRY_URL}:${BRANCH_NAME}
+   - docker push ${APP_IMAGE_REGISTRY_URL}:${BRANCH_NAME}
+
+terraform plan:
+  stage: build
+  image: adamjanis/cloudweekend-runner
+  script:
+   - cd terraform
+   - terraform init
+   - terraform plan
+
+terraform apply:
+  stage: apply
+  when: manual
+  image: adamjanis/cloudweekend-runner
+  script:
+   - cd terraform
+   - terraform init
+   - terraform apply -auto-approve
+  only:
+   - master
