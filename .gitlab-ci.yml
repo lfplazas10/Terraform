@@ -55,3 +55,4 @@ terraform apply:
    - terraform apply -auto-approve
   only:
    - master
+   
