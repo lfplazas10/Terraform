@@ -33,6 +33,10 @@ terraform plan:
   stage: build
   image: adamjanis/cloudweekend-runner
   script:
+   # GCP container registry login magic start
+   - echo "$GOOGLE_CREDENTIALS">/etc/key-file.json
+   - gcloud auth activate-service-account $GOOGLE_ACCOUNT --key-file /etc/key-file.json
+   - gcloud container clusters get-credentials cloudweekend --zone europe-west1-d --project $GOOGLE_PROJECT_ID
    - cd terraform
    - terraform init
    - terraform plan
@@ -42,6 +46,10 @@ terraform apply:
   when: manual
   image: adamjanis/cloudweekend-runner
   script:
+   # GCP container registry login magic start
+   - echo "$GOOGLE_CREDENTIALS">/etc/key-file.json
+   - gcloud auth activate-service-account $GOOGLE_ACCOUNT --key-file /etc/key-file.json
+   - gcloud container clusters get-credentials cloudweekend --zone europe-west1-d --project $GOOGLE_PROJECT_ID
    - cd terraform
    - terraform init
    - terraform apply -auto-approve
