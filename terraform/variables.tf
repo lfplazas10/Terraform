@@ -16,7 +16,7 @@ variable "gcp_zone" {
 variable "gcp_additional_zones" {
   description = "List of additional GCP zones, e.g. europe-west1-c"
   type        = "list"
-  default     = ["europe-west1-c"]
+  default     = ["europe-west1-c","europe-west1-b"]
 }
 
 variable "cluster_name" {
@@ -27,4 +27,14 @@ variable "cluster_name" {
 variable "initial_node_count" {
   description = "Number of worker VMs to initially create"
   default     = 1
+}
+
+variable "cloudfare_email" {
+  description = "Cloudfare email"
+  default     = "cloudweekend@kiwi.com"
+}
+
+variable "cloudfare_token" {
+  description = "Cloudfare token"
+  default     = "35dc179e718884621288a63d44ecf1bcf18c6"
 }

@@ -5,7 +5,7 @@ kind: Deployment
 metadata:
   name: myapp
 spec:
-  replicas: 1
+  replicas: 4
   selector:
     matchLabels:
       app: myapp-pod
@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: hello-app
-        image: gcr.io/google-samples/hello-app:1.0
+        image: gcr.io/google-samples/hello-app:2.0
         ports:
         - containerPort: 8080

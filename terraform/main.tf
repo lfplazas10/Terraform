@@ -21,3 +21,17 @@ resource "google_container_cluster" "cloudweekend" {
     tags = ["foo", "bar"]
   }
 }
+
+data "kubernetes_service" "cloudweekend" {
+  metadata {
+    name = "myapp-service"
+  }
+}
+
+resource "cloudflare_record" "domain" {
+  domain = "cloudweekend.kiwi"
+  name   = "luis-plazas"
+  value = "35.186.195.90"
+  type   = "A"
+  ttl    = 120
+}

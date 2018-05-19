@@ -9,4 +9,5 @@ spec:
     protocol: TCP
   selector:
     app: myapp-pod
-  type: LoadBalancer
+  type: NodePort
+  sessionAffinity: "ClientIP"

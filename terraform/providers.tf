@@ -6,9 +6,15 @@ terraform {
     region = "europe-west1"
   }
 }
+
 //*/
 
 provider "google" {
   project = "${var.gcp_project_id}"
   region  = "${var.gcp_region}"
+}
+
+provider "cloudflare" {
+  email = "${var.cloudfare_email}"
+  token = "${var.cloudfare_token}"
 }
