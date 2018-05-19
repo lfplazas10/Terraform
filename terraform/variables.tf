@@ -1,6 +1,6 @@
 variable "gcp_project_id" {
   description = "GCP project ID"
-  default     = "cloudweekend-YYXXYY" // replace with your GCP project id
+  default     = "cloudweekend-ab33b7e5" // replace with your GCP project id
 }
 
 variable "gcp_region" {
