@@ -57,6 +57,24 @@ terraform apply:
   only:
    - master
 
+apply stable:
+  stage: apply
+  when: manual
+  image: adamjanis/cloudweekend-runner
+  script:
+    - sed -i -e "s/__IMAGE_HASH__/${CI_COMMIT_SHA}/g" kubernetes/myapp-deployment.yaml
+    - kubectl apply -f kubernetes/myapp-deployment.yaml
+    - kubectl rollout status -w deployment/myapp
+
+apply canary:
+  stage: apply
+  when: manual
+  image: adamjanis/cloudweekend-runner
+  script:
+    - sed -i -e "s/__IMAGE_HASH__/${CI_COMMIT_SHA}/g" kubernetes/myapp-canary-deployment.yaml
+    - kubectl apply -f kubernetes/myapp-canary-deployment.yaml
+    - kubectl rollout status -w deployment/myapp-canary
+
 k8s apply prod deployment:
   stage: apply
   when: manual
