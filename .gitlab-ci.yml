@@ -17,13 +17,6 @@ before_script:
  - gcloud container clusters get-credentials cloudweekend --zone europe-west1-d --project $GOOGLE_PROJECT_ID
  # GCP container registry login magic end
 
-static-analysis:
-  stage: build
-  image: coala/base:0.11
-  allow_failure: true
-  script:
-   - coala-ci
-
 build:
   stage: build
   image: adamjanis/cloudweekend-runner
