@@ -28,11 +28,57 @@ data "kubernetes_service" "cloudweekend" {
   }
 }
 
+variable "subdomain_suffix" {
+  default = ""
+}
+
+
 resource "cloudflare_record" "domain" {
   count  = "${length(var.my_domains)}"
   domain = "cloudweekend.kiwi"
-  name   = "${var.my_domains[count.index]}"
+  name   = "${var.my_domains[count.index]}${var.subdomain_suffix}"
   value  = "35.186.195.90"
   type   = "A"
   ttl    = 120
+}
+
+resource "null_resource" "get-cluster-credentials" {
+  provisioner "local-exec" {
+    command = "gcloud container clusters get-credentials ${google_container_cluster.cloudweekend.name} --zone europe-west1-d"
+  }
+}
+
+resource "kubernetes_service" "myapp-service" {
+  depends_on = ["null_resource.get-cluster-credentials"]
+  "metadata" {
+    name = "myapp-service"
+  }
+  "spec" {
+    port {
+      port = 80
+      target_port = 80
+    }
+    selector {
+      app = "myapp-pod"
+    }
+    type = "NodePort"
+  }
+}
+
+resource "kubernetes_service" "myapp-canary-service" {
+  depends_on = ["null_resource.get-cluster-credentials"]
+  "metadata" {
+    name = "myapp-canary-service"
+  }
+  "spec" {
+    port {
+      port = 80
+      target_port = 80
+    }
+    selector {
+      app = "myapp-pod"
+      track = "canary"
+    }
+    type = "NodePort"
+  }
 }
