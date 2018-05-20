@@ -9,10 +9,12 @@ spec:
   selector:
     matchLabels:
       app: myapp-pod
+      track: stable
   template:
     metadata:
       labels:
         app: myapp-pod
+        track: stable
     spec:
       containers:
       - name: hello-app

@@ -62,4 +62,5 @@ k8s apply prod deployment:
   when: manual
   image: adamjanis/cloudweekend-runner
   script:
+    - sed -i -e "s/__IMAGE_HASH__/${CI_COMMIT_SHA}/g" kubernetes/myapp-deployment.yaml
     - kubectl apply -f kubernetes/myapp-deployment.yaml

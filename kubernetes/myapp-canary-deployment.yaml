@@ -9,6 +9,7 @@ spec:
   selector:
     matchLabels:
       app: myapp-pod
+      track: canary
   template:
     metadata:
       labels:
@@ -17,7 +18,7 @@ spec:
     spec:
       containers:
       - name: hello-app
-        image: eu.gcr.io/cloudweekend-ab33b7e5/myapp:master
+        image: eu.gcr.io/cloudweekend-ab33b7e5/myapp@sha256:2fc02654760f4bfc9e234141931756a0304cba71fc5ee35c631f9898888651e9
         ports:
         - containerPort: 80
         imagePullPolicy: Always
