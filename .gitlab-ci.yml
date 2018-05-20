@@ -3,11 +3,12 @@
 # GOOGLE_CREDENTIALS, GOOGLE_ACCOUNT, GOOGLE_PROJECT_ID
 stages:
  - build
+ - tagging
  - apply
 
 variables:
   APP_IMAGE_REGISTRY_URL: eu.gcr.io/${GOOGLE_PROJECT_ID}/myapp
-  BRANCH_NAME: ${CI_COMMIT_REF_SLUG}
+  IMAGE_HASH: ${CI_COMMIT_SHA}
 
 before_script:
  # GCP container registry login magic start
@@ -22,10 +23,20 @@ build:
   image: adamjanis/cloudweekend-runner
   allow_failure: true
   script:
-   - echo ${APP_IMAGE_REGISTRY_URL}:${BRANCH_NAME}
+   - echo ${APP_IMAGE_REGISTRY_URL}:${IMAGE_HASH}
    - docker build -t myapp .
-   - docker tag myapp ${APP_IMAGE_REGISTRY_URL}:${BRANCH_NAME}
-   - docker push ${APP_IMAGE_REGISTRY_URL}:${BRANCH_NAME}
+   - docker tag myapp ${APP_IMAGE_REGISTRY_URL}:${IMAGE_HASH}
+   - docker push ${APP_IMAGE_REGISTRY_URL}:${IMAGE_HASH}
+
+tag-latest:
+  stage: tagging
+  image: adamjanis/cloudweekend-runner
+  script:
+   - docker pull ${APP_IMAGE_REGISTRY_URL}:${IMAGE_HASH}
+   - docker tag ${APP_IMAGE_REGISTRY_URL}:${IMAGE_HASH} ${APP_IMAGE_REGISTRY_URL}:latest
+   - docker push ${APP_IMAGE_REGISTRY_URL}:latest
+  only:
+   - master
 
 terraform plan:
   stage: build
