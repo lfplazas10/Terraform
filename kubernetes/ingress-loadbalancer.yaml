@@ -13,3 +13,9 @@ spec:
       - backend:
           serviceName: myapp-service
           servicePort: 80
+  - host: luis-plazas-canary.cloudweekend.kiwi
+    http:
+      paths:
+      - backend:
+          serviceName: myapp-service-canary
+          servicePort: 80

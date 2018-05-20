@@ -16,7 +16,7 @@ variable "gcp_zone" {
 variable "gcp_additional_zones" {
   description = "List of additional GCP zones, e.g. europe-west1-c"
   type        = "list"
-  default     = ["europe-west1-c","europe-west1-b"]
+  default     = ["europe-west1-c", "europe-west1-b"]
 }
 
 variable "cluster_name" {
@@ -37,4 +37,14 @@ variable "cloudfare_email" {
 variable "cloudfare_token" {
   description = "Cloudfare token"
   default     = "35dc179e718884621288a63d44ecf1bcf18c6"
+}
+
+variable "my_domains" {
+  description = "my domains."
+  type        = "list"
+
+  default = [
+    "luis-plazas",
+    "luis-plazas-canary",
+  ]
 }

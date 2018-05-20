@@ -29,9 +29,10 @@ data "kubernetes_service" "cloudweekend" {
 }
 
 resource "cloudflare_record" "domain" {
+  count  = "${length(var.my_domains)}"
   domain = "cloudweekend.kiwi"
-  name   = "luis-plazas"
-  value = "35.186.195.90"
+  name   = "${var.my_domains[count.index]}"
+  value  = "35.186.195.90"
   type   = "A"
   ttl    = 120
 }
