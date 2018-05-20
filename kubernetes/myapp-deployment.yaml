@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: hello-app
-        image: gcr.io/google-samples/hello-app:2.0
+        image: eu.gcr.io/cloudweekend-ab33b7e5/myapp:master
         ports:
         - containerPort: 80
